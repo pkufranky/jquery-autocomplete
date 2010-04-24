@@ -41,6 +41,7 @@
       deferRequestBy: 0,
       width: 0,
       highlight: true,
+      queryWord: 'query',
       params: {},
       fnFormatResult: fnFormatResult,
       delimiter: null,
@@ -238,7 +239,7 @@
         this.suggest();
       } else if (!this.isBadQuery(q)) {
         me = this;
-        me.options.params.query = q;
+        me.options.params[me.options.queryWord] = q;
         $.get(this.serviceUrl, me.options.params, function(txt) { me.processResponse(txt); }, 'text');
       }
     },
@@ -288,11 +289,12 @@
         response = eval('(' + text + ')');
       } catch (err) { return; }
       if (!$.isArray(response.data)) { response.data = []; }
+      q = response[this.options.queryWord];
       if(!this.options.noCache){
-        this.cachedResponse[response.query] = response;
-        if (response.suggestions.length === 0) { this.badQueries.push(response.query); }
+        this.cachedResponse[q] = response;
+        if (response.suggestions.length === 0) { this.badQueries.push(q); }
       }
-      if (response.query === this.getQuery(this.currentValue)) {
+      if (q === this.getQuery(this.currentValue)) {
         this.suggestions = response.suggestions;
         this.data = response.data;
         this.suggest(); 
