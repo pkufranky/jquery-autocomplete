@@ -1,11 +1,11 @@
 /**
-*  Ajax Autocomplete for jQuery, version 1.1.2
+*  Ajax Autocomplete for jQuery, version 1.1.3
 *  (c) 2010 Tomas Kirda
 *
 *  Ajax Autocomplete for jQuery is freely distributable under the terms of an MIT-style license.
 *  For details, see the web site: http://www.devbridge.com/projects/autocomplete/jquery/
 *
-*  Last Review: 04/15/2010
+*  Last Review: 04/19/2010
 */
 
 /*jslint onevar: true, evil: true, nomen: true, eqeqeq: true, bitwise: true, regexp: true, newcap: true, immed: true */
@@ -150,11 +150,12 @@
           break;
         case 9: //KEY_TAB:
         case 13: //KEY_RETURN:
-          if (this.selectedIndex === -1 || e.keyCode === 9) {
+          if (this.selectedIndex === -1) {
             this.hide();
             return;
           }
           this.select(this.selectedIndex);
+          if(e.keyCode === 9){ return; }
           break;
         case 38: //KEY_UP:
           this.moveUp();
@@ -364,13 +365,13 @@
     },
 
     onSelect: function(i) {
-      var me, onSelect, s, d;
+      var me, fn, s, d;
       me = this;
-      onSelect = me.options.onSelect;
+      fn = me.options.onSelect;
       s = me.suggestions[i];
       d = me.data[i];
       me.el.val(me.getValue(s));
-      if ($.isFunction(onSelect)) { onSelect(s, d, me.el); }
+      if ($.isFunction(fn)) { fn(s, d, me.el); }
     },
     
     getValue: function(value){
